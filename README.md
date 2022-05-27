@@ -24,6 +24,6 @@ const arg = [
 Run
 
 ```
-npm index.js
+node index.js
 ```
 

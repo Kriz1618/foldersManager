@@ -12,7 +12,7 @@
 ### Install
 
 ```
-npm run start
+npm install
 ```
 
 Modify the entry in the file entryFile.txt

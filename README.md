@@ -2,28 +2,38 @@
 
 ## How to use
 
-Download or clone this repo
+### Download or clone this repo
 
 ```
- git clone
+ git clone https://github.com/kriz1618/foldersManager
  cd foldersManager
 ```
 
-Modify the params in the line *121*
+### Install
+
+```
+npm run start
+```
+
+Modify the entry in the file entryFile.txt
 
 ```
 Example
-const arg = [
-    'CREATE fruits/mongose',
-    'CREATE vegetables',
-    'CREATE fruits/carrot',
-    'MOVE fruits/carrot vegetables',
-    'LIST'
+    CREATE fruits/mongose
+    CREATE vegetables
+    CREATE fruits/carrot
+    MOVE fruits/carrot vegetables
+    LIST
 ```
 
-Run
+### Run
 
 ```
-npm index.js
+npm start
 ```
 
+### Run tests
+
+```
+npm run test
+```

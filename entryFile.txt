@@ -1,0 +1,14 @@
+CREATE fruits/mongose/poma
+CREATE vegetables
+CREATE vegetables/potato
+CREATE fruits/apples
+CREATE fruits/apples/fuji
+REMOVE fruits/apples/fuji
+CREATE fruits/onion
+LIST
+CREATE vegetables/potato/yellow
+CREATE vegetables/potato/chinese
+MOVE fruits/onion vegetables
+LIST
+REMOVE vegetables/potato/chinese
+LIST

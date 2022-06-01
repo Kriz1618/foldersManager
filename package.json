@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "start": "node index.js main",
+    "test": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^28.1.0"
+  },
+  "dependencies": {
+    "line-reader": "^0.4.0"
+  }
+}

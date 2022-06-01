@@ -1,40 +1,37 @@
 'use strict'
 
-function manageFolders(commands) {
-    const root = {};
+const lineReader = require('line-reader');
 
-    for (let i = 0; i < commands.length; i++) {
-        const task = commands[i].split(' ')[0];
-        const args = commands[i].split(' ')[1];
-        const extraArg = commands[i].split(' ')[2];
+function manageFolders(command, path) {
+    const root = path || {};
 
-        switch (task) {
-            case 'CREATE': {
-                createPath(root, args);
-                break;
-            }
-            case 'LIST': {
-                showPaths(root, 0);
-                console.log('\n');
-                break;
-            }
-            case 'REMOVE': {
-                removeFolder(root, args);
-                break;
-            }
-            case 'MOVE': {
-                moveFolder(root, args, extraArg);
-                break;
-            }
-            default: return;
+    const task = command.split(' ')[0]?.toUpperCase();
+    const args = command.split(' ')[1];
+    const extraArg = command.split(' ')[2];
+
+    switch (task) {
+        case 'CREATE': {
+            createPath(root, args);
+            break;
         }
+        case 'MOVE': {
+            return moveFolder(root, args, extraArg);
+        }
+        case 'REMOVE': {
+            return removeFolder(root, args);
+        }
+        case 'LIST': {
+            return showPaths(root, 0);
+        }
+        default:
+            return 'Invalid task';
     }
 }
 
 function createPath(root, args) {
-    const argsList = args.split('/');
+    const argsList = args?.split('/');
 
-    if (!argsList.length) {
+    if (!argsList?.length) {
         return '';
     }
     if (argsList.length > 1) {
@@ -49,16 +46,19 @@ function createPath(root, args) {
 
 function showPaths(root, identation) {
     if (!root || typeof root !== 'object') {
-        return;
+        return '';
     }
 
+    let result = '';
     const mainFolders = Object.keys(root);
     const identationStr = new Array(identation).join(' ');
 
     for (let i = 0; i < mainFolders.length; i++) {
-        console.log(`${identationStr}${mainFolders[i]}`);
-        showPaths(root[mainFolders[i]], identation + 2);
+        result += `${identationStr}${mainFolders[i]}\n`;
+        result += showPaths(root[mainFolders[i]], identation + 2);
     }
+
+    return result;
 }
 
 function removeFolder(root, folderPath) {
@@ -83,23 +83,25 @@ function removeFolder(root, folderPath) {
     }
 
     if (!deleted) {
-        console.log(error);
+        return error;
     }
+
+    return '';
 }
 
 function moveFolder(root, folderPath, destiny) {
     const validOrigin = validatePath(root, folderPath);
     const validDestiny = validatePath(root, destiny);
     const folder = folderPath.split('/').pop();
-
+    const error = `Cannot move ${folder} - `;
+    
     if (!validOrigin || !validDestiny) {
-        console.log(
-            `Cannot move ${folder} - ${validOrigin ? folderPath : destiny} does not exist`,
-        );
+        return `${error}${!validOrigin ? folderPath : destiny} does not exist`;
     }
 
     removeFolder(root, folderPath);
     createPath(root, `${destiny}/${folder}`);
+    return '';
 }
 
 function validatePath(root, path) {
@@ -116,21 +118,17 @@ function validatePath(root, path) {
     return true;
 }
 
-const arg = [
-    'CREATE fruits/mongose/poma',
-    'CREATE vegetables',
-    'CREATE vegetables/potato',
-    'CREATE fruits/apples',
-    'CREATE fruits/apples/fuji',
-    'REMOVE fruits/apples/fuji',
-    'CREATE fruits/onion',
-    'LIST',
-    'CREATE vegetables/potato/yellow',
-    'CREATE vegetables/potato/chinese',
-    'MOVE fruits/onion vegetables',
-    'LIST',
-    'REMOVE vegetables/potato/chinese',
-    'LIST'
-];
+/* istanbul ignore next */
+(function main() {
+    if (process.argv[2] !== 'main') {
+        return;
+    }
 
-manageFolders(arg);
+    const root = {};
+    lineReader.eachLine('entryFile.txt', (task) => {
+        const result = manageFolders(task, root) || '';
+        console.log(task, '\n', result);
+    });
+})();
+
+module.exports = { manageFolders };

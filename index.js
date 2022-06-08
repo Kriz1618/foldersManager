@@ -17,7 +17,7 @@ function manageFolders(command, path) {
         case 'MOVE': {
             return moveFolder(root, args, extraArg);
         }
-        case 'REMOVE': {
+        case 'DELETE': {
             return removeFolder(root, args);
         }
         case 'LIST': {
@@ -127,7 +127,8 @@ function validatePath(root, path) {
     const root = {};
     lineReader.eachLine('entryFile.txt', (task) => {
         const result = manageFolders(task, root) || '';
-        console.log(task, '\n', result);
+        console.log(task);
+        console.log(result);
     });
 })();
 

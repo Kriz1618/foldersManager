@@ -63,10 +63,10 @@ describe("Folders Manager Test", () => {
         });
     });
    
-    describe("Remove folders", () => {
+    describe("Delete folders", () => {
         it("Shouldn't remove a folder", () => {
             path = { food: { fruits: "" } };
-            const result = manager.manageFolders('REMOVE food/dolls', path);
+            const result = manager.manageFolders('DELETE food/dolls', path);
 
             expect(result).toEqual("Cannot delete food/dolls - dolls does not exist");
             expect(path).toEqual({ food: { fruits: "" } });
@@ -74,7 +74,7 @@ describe("Folders Manager Test", () => {
 
         it("Should remove a folder", () => {
             path = { food: { fruits: { onion: "" } } };
-            const result = manager.manageFolders('remove food/fruits/onion', path);
+            const result = manager.manageFolders('delete food/fruits/onion', path);
 
             expect(result).toEqual("");
             expect(path).toEqual({ food: { fruits: {} } });
